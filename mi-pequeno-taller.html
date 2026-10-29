@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Mi pequeño taller</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:light;--rose:#E8A0B4;--roseD:#B65F7B;--pink:#FBE4EA;--cream:#FFF8F0;--beige:#F3E6D6;--brown:#6F5244;--brownS:#A67B68;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--cream);color:var(--brown);font-family:Quicksand,Nunito,ui-rounded,system-ui,sans-serif;font-size:17px;line-height:1.5}
+#app{max-width:880px;margin:0 auto;padding:22px 16px 48px}
+.card{background:#fff;border:1px solid var(--beige);border-radius:28px;padding:26px;margin-bottom:18px;box-shadow:0 6px 22px rgba(166,123,104,.12)}
+.c{text-align:center}
+h1{font-size:2.5rem;margin:.1em 0;color:var(--roseD)}h2{margin:.2em 0 .4em}
+.sub{font-size:1.2rem;margin:0 0 14px}.mut{color:var(--brownS);margin:4px 0}
+.deco{color:var(--rose);letter-spacing:.5em;font-size:1.1rem}
+.btn{background:var(--roseD);color:#fff;border:0;border-radius:999px;padding:13px 30px;font-weight:700;font-size:1.05rem;font-family:inherit;cursor:pointer;transition:background .2s,transform .15s;margin-top:12px}
+.btn:hover{background:#A24F6B;transform:translateY(-1px)}.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.btn.s{background:var(--beige);color:var(--brown)}.btn.s:hover{background:#EBD8C2}
+.btn:focus-visible,.tb:focus-visible,.lb:focus-visible,input:focus-visible{outline:3px solid var(--brownS);outline-offset:2px}
+.acc{width:100%;max-width:380px;height:auto}.pair{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}.pair .acc{max-width:250px}
+.pl{cursor:grab;touch-action:none}.ghost{position:fixed;width:46px;height:46px;border-radius:50%;pointer-events:none;z-index:99;border:2px solid rgba(111,82,68,.4);transform:translate(-50%,-50%);box-shadow:0 4px 10px rgba(0,0,0,.2)}.pl:hover circle:first-child{stroke:#6F5244;stroke-width:2}
+.tray{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;padding:14px;background:var(--beige);border-radius:20px;margin-top:8px}
+.tb{touch-action:none;user-select:none;cursor:grab;width:46px;height:46px;border-radius:50%;border:2px solid rgba(111,82,68,.3);cursor:pointer;transition:transform .15s}.tb:hover{transform:scale(1.1)}.tb.u{visibility:hidden}
+.cols{display:grid;grid-template-columns:1fr 2fr;gap:18px;align-items:start}@media(max-width:640px){.cols{grid-template-columns:1fr}}
+.g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}.g3>div{background:var(--cream);border-radius:20px;padding:14px;text-align:center}
+.prog{height:10px;background:var(--beige);border-radius:9px;overflow:hidden}.prog div{height:100%;background:var(--rose);transition:width .4s}
+.pf{display:flex;align-items:center;gap:8px;background:var(--cream);border:2px solid var(--beige);border-radius:18px;padding:8px 16px;max-width:320px;font-weight:700}
+.pf input{border:0;background:transparent;font-weight:700;font-size:1.4rem;font-family:inherit;color:var(--brown);width:100%;outline-offset:6px}
+.lik{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}@media(max-width:640px){.lik{grid-template-columns:repeat(2,1fr)}}
+.lb{background:var(--cream);border:2px solid var(--beige);border-radius:16px;padding:10px 4px;cursor:pointer;color:var(--brown);font-family:inherit;display:flex;flex-direction:column;gap:2px;align-items:center;transition:background .2s}
+.lb b{font-size:1.3rem}.lb span{font-size:.8rem;line-height:1.2}.lb:hover{background:var(--pink)}.lb.on{background:var(--rose);border-color:var(--roseD)}
+.err{color:#A23B55;font-weight:600;min-height:1.4em;margin:6px 0}.chk{display:flex;gap:10px;align-items:flex-start;margin:14px 0}.chk input{width:22px;height:22px;margin-top:3px;accent-color:var(--roseD)}
+input.t{font:inherit;padding:12px 16px;border:2px solid var(--beige);border-radius:16px;background:var(--cream);color:var(--brown);width:100%;max-width:320px}
+table{border-collapse:collapse;font-size:.8rem;width:100%}td,th{border-bottom:1px solid var(--beige);padding:4px 6px;text-align:left}.tw{overflow-x:auto}
+textarea{width:100%;height:120px;font:12px monospace;border-radius:12px;border:1px solid var(--beige);padding:8px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head><body><main id="app"></main>
+<script>
+const COL=['#E8A0B4','#A67B68','#E9D3A4'],CN=['rosa','marrón','crema'];
+const LV={1:{t:Array(12).fill(0),tr:Array(12).fill(0)},
+2:{t:[0,1,0,1,0,1,0,1,0,1,0,1],tr:[1,0,0,1,0,1,1,0,1,0,0,1]},
+3:{t:[0,2,1,1,0,2,0,1,2,2,1,0],tr:[2,0,1,2,1,0,0,2,1,1,2,0]}};
+const TASKS=[['pulsera',1],['pulsera',2],['pulsera',3],['collar',1],['collar',2],['collar',3]];
+const DL=['','facil','medio','dificil'];
+const KEY='taller_v1',PIN='taller2026',MAX=1000000;
+const H=['participant_id','session_code','group','es_demo','order','object_type','difficulty','price_clp','build_time_s','response_time_s','errors','removals','completed','timestamp'];
+const LIK=['Muy poco esfuerzo','Poco esfuerzo','Algo de esfuerzo','Esfuerzo moderado','Bastante esfuerzo','Mucho esfuerzo','Muchísimo esfuerzo'];
+let DB={rows:[],sess:null};
+try{const d=JSON.parse(localStorage.getItem(KEY));if(d&&d.rows)DB=d}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(DB))}catch(e){}};
+const $=s=>document.querySelector(s);
+let S={screen:'welcome',auth:false,csv:''},T=null,E=null;
+
+function pos(t,i){if(t=='pulsera'){const a=(-90+i*30)*Math.PI/180;return[200+105*Math.cos(a),145+105*Math.sin(a)]}
+const a=(150-i*120/11)*Math.PI/180;return[200+210*Math.cos(a),40+210*Math.sin(a)]}
+function acc(t,cols,o={}){let s=`<svg ${o.id?`id="${o.id}" `:''}viewBox="0 0 400 290" class="acc" role="img" aria-label="${t}">`;
+s+=t=='pulsera'?'<circle cx="200" cy="145" r="105" fill="none" stroke="#C9A58F" stroke-width="3"/>':'<path d="M18 145A210 210 0 0 0 382 145" fill="none" stroke="#C9A58F" stroke-width="3"/><circle cx="18" cy="145" r="6" fill="#C9A58F"/><circle cx="382" cy="145" r="6" fill="#C9A58F"/>';
+cols.forEach((c,i)=>{const[x,y]=pos(t,i);
+s+=c==null?`<circle cx="${x}" cy="${y}" r="17" fill="#FFF8F0" stroke="#D9BFAE" stroke-dasharray="4 4"/>`:
+`<g ${o.rm?`data-drag="s" data-i="${i}" class="pl"`:''}><circle cx="${x}" cy="${y}" r="17" fill="${COL[c]}" stroke="rgba(111,82,68,.3)"/><circle cx="${x-5}" cy="${y-6}" r="5" fill="#fff" opacity=".55"/></g>`});
+if(o.lab){const[x,y]=pos(t,0);s+=`<text x="${x}" y="${y-26}" text-anchor="middle" font-size="14" fill="#A67B68" font-family="Quicksand,sans-serif">inicio ▾</text>`}
+return s+'</svg>'}
+const part=k=>Array.from({length:12},(_,i)=>i<k?i%2:null);
+const bar=()=>{const n=DB.sess.idx;return`<div class="prog"><div style="width:${n/6*100}%"></div></div><p class="mut">Accesorio ${n+1} de 6</p>`};
+const isC=()=>DB.sess.group=='construccion';
+
+const SC={
+welcome:()=>`<div class="card c"><div class="deco">✿ ✦ ♡ ✦ ✿</div><h1>Mi pequeño taller</h1><p class="sub">Crea, observa y descubre cuánto vale cada detalle</p>
+<div class="pair">${acc('pulsera',LV[3].t)}${acc('collar',LV[2].t)}</div>
+<p>Esta es una actividad universitaria de investigación. Dura unos 10 a 15 minutos.</p><button class="btn" data-act="to" data-s="consent">Comenzar</button></div>`,
+consent:()=>`<div class="card"><h2>Consentimiento informado</h2>
+<p>Esta actividad forma parte de una investigación universitaria sobre cómo las personas valoran accesorios. Tu participación es voluntaria y puedes detenerte en cualquier momento cerrando la página.</p>
+<p>No se recopilan nombres, correos ni otros datos personales. Se guardan un código anónimo, tus respuestas y los tiempos de la actividad, que se usarán solo con fines académicos y de forma agregada.</p>
+<p>Al terminar, el equipo de investigación podrá explicarte el propósito completo del estudio.</p>
+<label class="chk"><input type="checkbox" id="ok"> He leído la información y acepto participar voluntariamente.</label>
+<button class="btn" id="cont" disabled data-act="to" data-s="code">Continuar</button></div>`,
+code:()=>`<div class="card"><h2>Código de sesión</h2><p>Ingresa el código que te entregó la persona investigadora.</p>
+<input class="t" id="code" autocomplete="off" aria-label="Código de sesión"><p class="err" id="err"></p><button class="btn" data-act="start">Continuar</button></div>`,
+tutorial:()=>{const C=isC(),st=C?[['Mira el modelo','Arriba verás el diseño que debes reproducir, con los mismos colores y orden.',acc('pulsera',LV[2].t,{lab:1})],['Arrastra una cuenta','Llévala desde la bandeja hasta el espacio de la cuerda donde va y suéltala.',acc('pulsera',part(4))],['Corrige y confirma','Para corregir, arrastra una cuenta a otro espacio o fuera de la cuerda. Cuando termines, pulsa Confirmar.',acc('pulsera',part(12))]]:
+[['Mira el accesorio','Verás un accesorio ya terminado, con el tamaño suficiente para apreciar los detalles.',acc('collar',LV[2].t)],['Escribe un precio','Indica cuánto dinero pagarías por él, en pesos chilenos (CLP).','<p style="font-size:2rem;margin:40px 0">$ ______ CLP</p>'],['Continúa','Son 6 accesorios en total: 3 pulseras y 3 collares.','<p style="font-size:2rem;margin:40px 0">✿ ✿ ✿ ✿ ✿ ✿</p>']];
+return`<div class="card"><h2>Cómo funciona</h2><div class="g3">${st.map(s=>`<div><b>${s[0]}</b><br>${s[2]}<p>${s[1]}</p></div>`).join('')}</div><div class="c"><button class="btn" data-act="begin">Entendido, empezar</button></div></div>`},
+task:()=>{const[t,l]=TASKS[DB.sess.idx],tr=LV[l].tr,cols=T.slots.map(id=>id==null?null:tr[id]);
+return`<div class="card">${bar()}<h2>Reproduce este diseño</h2><p>Arrastra las cuentas de la bandeja hasta su lugar en la cuerda, con los mismos colores y en el mismo orden que el modelo, partiendo desde «inicio».</p>
+<div class="cols"><div><p class="mut">Modelo (${t})</p>${acc(t,LV[l].t,{lab:1})}</div><div><p class="mut">Tu ${t}</p>${acc(t,cols,{rm:1,lab:1,id:'build'})}</div></div>
+<div class="tray">${tr.map((c,id)=>`<button class="tb${T.slots.includes(id)?' u':''}" style="background:${COL[c]}" data-drag="t" data-id="${id}" aria-label="Cuenta ${CN[c]}"></button>`).join('')}</div>
+<p class="err">${T.msg||''}</p><div class="c"><button class="btn" data-act="confirm" ${T.slots.includes(null)?'disabled':''}>Confirmar diseño</button></div></div>`},
+eval:()=>{const[t,l]=TASKS[DB.sess.idx],C=isC();
+return`<div class="card">${bar()}<div class="c">${acc(t,LV[l].t)}</div><h2>¿Cuánto dinero pagarías por este accesorio?</h2>
+<div class="pf"><span>$</span><input id="price" inputmode="numeric" autocomplete="off" aria-label="Monto en pesos chilenos"><span>CLP</span></div>
+
+<p class="err" id="err"></p><div class="c"><button class="btn" id="sub" disabled data-act="submit">Continuar</button></div></div>`},
+thanks:()=>`<div class="card c"><div class="deco">♡ ✿ ♡</div><h1>¡Gracias por participar!</h1><p>Tus respuestas quedaron registradas. Al terminar el estudio, el equipo de investigación podrá explicarte su propósito completo.</p><button class="btn s" data-act="end">Cerrar</button></div>`,
+admin:()=>{if(!S.auth)return`<div class="card"><h2>Acceso investigadores</h2><input class="t" id="pin" type="password" aria-label="PIN"><p class="err" id="err"></p><button class="btn" data-act="pin">Entrar</button></div>`;
+const R=DB.rows,real=R.filter(r=>!r.es_demo).length;
+return`<div class="card"><h2>Panel de investigación</h2>
+<p><b>Almacenamiento:</b> localStorage de este navegador y dispositivo. No hay servidor: borrar datos del sitio o cambiar de equipo pierde los registros. Si se recarga a mitad de tarea, esa tarea reinicia (el cronómetro también). Exporta el CSV al terminar cada sesión.</p>
+<p><b>Archivo CSV local:</b> ${FH?FH.name:'sin vincular'}. ${S.fmsg||''}<br>Vincula un archivo (Chrome o Edge) y cada respuesta real se agrega al final automáticamente. Las demos no se escriben en el archivo.</p><button class="btn" data-act="link">Vincular archivo CSV</button>
+<p>Sesión de prueba (códigos de demo no contaminan los datos reales; se marcan es_demo=1):</p>
+<button class="btn" data-act="demo" data-g="C">Demo construcción</button> <button class="btn" data-act="demo" data-g="O">Demo observación</button> <button class="btn s" data-act="resetsess">Reiniciar sesión actual</button></div>
+<div class="card"><h2>Diseños experimentales</h2><div class="g3">${[1,2,3].map(l=>`<div><b>Nivel ${l} (${DL[l]})</b>${acc('pulsera',LV[l].t)}${acc('collar',LV[l].t)}<p class="mut">${LV[l].t.map(c=>CN[c][0]).join(' ')}<br>(r=rosa, m=marrón, c=crema) · 12 cuentas</p></div>`).join('')}</div></div>
+<div class="card"><h2>Registros (${R.length}; reales: ${real})</h2><button class="btn" data-act="csv" data-a="0">CSV datos reales</button> <button class="btn s" data-act="csv" data-a="1">CSV incluyendo demo</button> <button class="btn s" data-act="deldemo">Borrar registros demo</button>
+<p class="mut">Si la descarga no arranca en tu navegador, copia el texto de abajo y pégalo en un archivo .csv.</p><textarea id="csvbox" readonly>${S.csv}</textarea>
+<div class="tw"><table><tr>${H.map(h=>`<th>${h}</th>`).join('')}</tr>${R.slice(-80).map(r=>`<tr>${H.map(h=>`<td>${r[h]??''}</td>`).join('')}</tr>`).join('')}</table></div>
+<button class="btn s" data-act="out">Salir</button></div>`}
+};
+function render(){$('#app').innerHTML=SC[S.screen]()}
+function go(s){S.screen=s;render();scrollTo(0,0)}
+function stageScreen(){const s=DB.sess;if(!s)return'welcome';if(s.stage=='eval'&&isC()&&!s.pending)s.stage='task';
+if(s.stage=='task'){T=newT();E=null}if(s.stage=='eval')E={eff:null,t1:performance.now(),sub:false};return s.stage}
+const newT=()=>({slots:Array(12).fill(null),t0:performance.now(),err:0,rm:0,msg:''});
+const csv=a=>{const e=v=>{v=String(v??'');return/[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
+return[H.join(','),...DB.rows.filter(r=>a||!r.es_demo).map(r=>H.map(h=>e(r[h])).join(','))].join('\n')};
+function startSess(code,group,demo){DB.sess={id:(demo?'D':'P')+Math.random().toString(36).slice(2,7).toUpperCase(),code,group,demo,idx:0,stage:'tutorial',pending:null};save()}
+function chk(){const p=($('#price').value||'').replace(/\D/g,'');$('#sub').disabled=!p}
+const A={
+to:d=>go(d.s),
+start:()=>{const v=$('#code').value.trim().toUpperCase(),er=$('#err');let m=v.match(/^(C|O)\d{2,3}$/),dm=v.match(/^DEMO-(C|O)$/);
+if(!m&&!dm){er.textContent='Código no válido. Revisa el código con la persona investigadora.';return}
+if(m&&DB.rows.some(r=>r.session_code==v&&!r.es_demo)){er.textContent='Este código ya fue utilizado.';return}
+const g=(m||dm)[1]=='C'?'construccion':'observacion';startSess(v,g,!!dm);go('tutorial')},
+begin:()=>{const s=DB.sess;s.stage=isC()?'task':'eval';save();if(isC())T=newT();else E={eff:null,t1:performance.now(),sub:false};go(s.stage)},
+pick:d=>{const i=T.slots.indexOf(null);if(i<0)return;T.slots[i]=+d.id;T.msg='';render()},
+rm:d=>{T.slots[+d.i]=null;T.rm++;T.msg='';render()},
+confirm:()=>{const[t,l]=TASKS[DB.sess.idx],tr=LV[l].tr;
+if(!T.slots.every((id,i)=>id!=null&&tr[id]==LV[l].t[i])){T.err++;T.msg='Todavía no coincide con el modelo. Revisa los colores y el orden.';render();return}
+DB.sess.pending={bt:(performance.now()-T.t0)/1000,err:T.err,rm:T.rm};DB.sess.stage='eval';save();E={eff:null,t1:performance.now(),sub:false};go('eval')},
+eff:d=>{E.eff=+d.v;document.querySelectorAll('.lb').forEach(b=>b.classList.toggle('on',b.dataset.v==d.v));chk()},
+submit:()=>{if(E.sub)return;const s=DB.sess,p=+($('#price').value||'').replace(/\D/g,'');
+if(!(p>=1&&p<=MAX)){$('#err').textContent='Ingresa un monto entero en CLP, entre $1 y $1.000.000.';return}
+E.sub=true;$('#sub').disabled=true;const[t,l]=TASKS[s.idx],C=isC(),pe=s.pending||{};
+const row={participant_id:s.id,session_code:s.code,group:s.group,es_demo:s.demo?1:0,order:s.idx+1,object_type:t,difficulty:l,price_clp:p,build_time_s:C?+pe.bt.toFixed(2):'',response_time_s:+((performance.now()-E.t1)/1000).toFixed(2),errors:C?pe.err:'',removals:C?pe.rm:'',completed:1,timestamp:new Date().toISOString()};
+if(!DB.rows.some(r=>r.participant_id==s.id&&r.order==s.idx+1)){DB.rows.push(row);if(!s.demo)fileAppend(row)}
+s.idx++;s.pending=null;s.stage=s.idx>=6?'thanks':(C?'task':'eval');save();T=C?newT():null;E=C?null:{eff:null,t1:performance.now(),sub:false};go(s.stage)},
+end:()=>{DB.sess=null;save();go('welcome')},
+pin:()=>{if($('#pin').value==PIN){S.auth=true;render()}else $('#err').textContent='PIN incorrecto.'},
+demo:d=>{startSess('DEMO-'+d.g,d.g=='C'?'construccion':'observacion',true);S.auth=false;location.hash='';go('tutorial')},
+resetsess:()=>{DB.sess=null;save();alert('Sesión actual reiniciada.')},
+csv:d=>{S.csv=csv(d.a=='1');render();try{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+S.csv],{type:'text/csv'}));a.download='efecto_ikea_datos.csv';a.click()}catch(e){}},
+deldemo:()=>{if(confirm('¿Borrar los registros de demostración?')){DB.rows=DB.rows.filter(r=>!r.es_demo);save();render()}},
+ link:async()=>{try{FH=await showSaveFilePicker({suggestedName:'efecto_ikea_datos.csv',types:[{description:'CSV',accept:{'text/csv':['.csv']}}]});await idb('put',FH);S.fmsg='Archivo vinculado.'}catch(e){S.fmsg=e.name=='AbortError'?'':'Este navegador o contexto no permite vincular archivos. Usa Chrome o Edge con el archivo HTML abierto en el computador.'}render()},
+out:()=>{S.auth=false;location.hash='';S.screen=stageScreen();render()}
+};
+document.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(b&&!b.disabled)A[b.dataset.act](b.dataset)});
+document.addEventListener('change',e=>{if(e.target.id=='ok')$('#cont').disabled=!e.target.checked});
+document.addEventListener('input',e=>{if(e.target.id=='price'){const n=e.target.value.replace(/\D/g,'').slice(0,8);e.target.value=n?(+n).toLocaleString('es-CL'):'';$('#err').textContent='';chk()}});
+document.addEventListener('keydown',e=>{if(e.key=='Enter'){if(e.target.id=='code')A.start();if(e.target.id=='pin')A.pin()}});
+let FH=null,D=null;
+const idb=(m,v)=>new Promise(res=>{try{const r=indexedDB.open('taller_h',1);r.onupgradeneeded=()=>r.result.createObjectStore('h');r.onerror=()=>res(null);r.onsuccess=()=>{const st=r.result.transaction('h',m=='get'?'readonly':'readwrite').objectStore('h'),q=m=='get'?st.get('fh'):st.put(v,'fh');q.onsuccess=()=>res(q.result);q.onerror=()=>res(null)}}catch(e){res(null)}});
+idb('get').then(h=>{if(h)FH=h});
+async function fileAppend(r){if(!FH)return;try{let p=await FH.queryPermission({mode:'readwrite'});if(p!='granted')p=await FH.requestPermission({mode:'readwrite'});
+if(p!='granted'){S.fmsg='Sin permiso para escribir en el archivo: vuelve a vincularlo en el panel.';return}
+const f=await FH.getFile(),w=await FH.createWritable({keepExistingData:true}),e=v=>{v=String(v??'');return/[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
+await w.seek(f.size);await w.write((f.size?'':'\ufeff'+H.join(',')+'\n')+H.map(h=>e(r[h])).join(',')+'\n');await w.close();S.fmsg='Última escritura correcta.'}catch(x){S.fmsg='No se pudo escribir en el archivo: '+x.message}}
+const mv=e=>{if(D){D.g.style.left=e.clientX+'px';D.g.style.top=e.clientY+'px'}};
+document.addEventListener('pointerdown',e=>{const el=e.target.closest('[data-drag]');if(!el||!T||S.screen!='task')return;e.preventDefault();
+const tr=LV[TASKS[DB.sess.idx][1]].tr,g=document.createElement('div');g.className='ghost';
+g.style.background=COL[el.dataset.drag=='t'?tr[+el.dataset.id]:tr[T.slots[+el.dataset.i]]];document.body.appendChild(g);
+D={k:el.dataset.drag,id:+el.dataset.id,i:+el.dataset.i,g};mv(e)});
+document.addEventListener('pointermove',mv);
+document.addEventListener('pointercancel',()=>{if(D){D.g.remove();D=null}});
+document.addEventListener('pointerup',e=>{if(!D)return;const d=D;D=null;d.g.remove();
+const sv=$('#build'),t=TASKS[DB.sess.idx][0],sl=T.slots;let hit=-1;
+if(sv){const p=sv.createSVGPoint();p.x=e.clientX;p.y=e.clientY;const q=p.matrixTransform(sv.getScreenCTM().inverse());let best=30;
+for(let i=0;i<12;i++){const[x,y]=pos(t,i),dd=Math.hypot(x-q.x,y-q.y);if(dd<best){best=dd;hit=i}}}
+if(d.k=='t'){if(hit>=0){if(sl[hit]!=null)T.rm++;sl[hit]=d.id}}
+else{const id=sl[d.i];if(hit<0){sl[d.i]=null;T.rm++}else if(hit!=d.i){sl[d.i]=sl[hit];sl[hit]=id}}
+T.msg='';render()});
+function route(){S.screen=location.hash=='#investigadores'?'admin':stageScreen();render()}
+addEventListener('hashchange',route);route();
+</script></body></html>
