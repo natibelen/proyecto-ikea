@@ -1,0 +1,33 @@
+{
+  "H1_welch_y_cohen": {
+    "estado": "ok",
+    "n_construccion": 3,
+    "n_observacion": 3,
+    "t": 5.22625,
+    "grados_libertad": 3.9062,
+    "p_bilateral": 0.006830758495017844,
+    "cohen_d": 4.2672,
+    "media_geometrica_construccion_clp": 3317.59,
+    "media_geometrica_observacion_clp": 2394.65,
+    "diferencia_logaritmica": 0.326,
+    "diferencia_porcentual": 38.54,
+    "ic95_porcentaje_inferior": 16.32,
+    "ic95_porcentaje_superior": 65.01
+  },
+  "H2_modelo_mixto": {
+    "estado": "ok",
+    "n_participantes": 6,
+    "chi2_interaccion": 44.28381,
+    "grados_libertad": 2,
+    "p_interaccion": 2.420432879760706e-10,
+    "coeficientes": {
+      "Intercept": 8.58574,
+      "C(group)[T.observacion]": -0.1807,
+      "C(difficulty)[T.2]": 0.23934,
+      "C(difficulty)[T.3]": 0.52244,
+      "C(object_type)[T.pulsera]": -1.46535,
+      "C(group)[T.observacion]:C(difficulty)[T.2]": -0.12857,
+      "C(group)[T.observacion]:C(difficulty)[T.3]": -0.30734
+    }
+  }
+}
