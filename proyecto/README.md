@@ -12,6 +12,7 @@ Esta versión separa el HTML, CSS y JavaScript en archivos distintos y divide pa
 - `js/storage.js`: carga y guardado local de los datos y selector de DOM.
 - `js/accessories.js`: posiciones, geometría y generación SVG de accesorios.
 - `js/csv.js`: creación del CSV a partir de los registros.
+- `js/consent.js`: texto completo del consentimiento informado (versión larga, aceptación con casilla).
 - `js/app.js`: pantallas, flujo de sesión, eventos, administración y escritura en archivo.
 
 ## Cómo ejecutar

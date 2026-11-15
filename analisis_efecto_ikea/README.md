@@ -14,13 +14,17 @@ python -m pip install -r requirements.txt
 python analizar.py --input datos --output resultados --demo
 ```
 
-**CSV de participantes reales** (`C01`, `O01`, etc.):
+**CSV de participantes reales** (números de participante `1`–`60`):
 
 ```bash
 python analizar.py --input datos --output resultados
 ```
 
 La carpeta de entrada puede contener **uno o varios CSV**, incluso archivos con ambos grupos. El programa los une y acepta solo sesiones completas con seis valoraciones diferentes. Ignora sesiones demo en modo normal y registros reales en modo `--demo`.
+
+**Números de participante**: del `1` al `30` corresponden a construcción y del `31` al `60` a observación (definido en `RANGOS` de `carga.py`, que debe coincidir con `GRUPOS` en `proyecto/js/config.js`). Se descarta la sesión si el grupo registrado no coincide con el rango del número. Por compatibilidad también se aceptan los códigos antiguos `C01`/`O01`.
+
+Si se usaron **varios computadores** y un mismo número quedó registrado por dos personas distintas (distinto `participant_id`), ambas sesiones se excluyen y el programa lo avisa con el mensaje «Número(s) de participante usados por más de una persona».
 
 ## Organización del código
 

@@ -1,7 +1,12 @@
-"""Carga y validación de CSV generados por mi-pequeno-taller.html.
+"""Carga y validación de CSV generados por la aplicación web (carpeta proyecto/).
 
 Reglas: dos grupos independientes, 6 modelos por participante (3 pulseras,
 3 collares), una respuesta monetaria por modelo.
+
+Códigos de sesión:
+    * Número de participante 1–30 → construcción; 31–60 → observación.
+    * Formato antiguo C01…/O01… (aceptado por compatibilidad).
+    * DEMO-C / DEMO-O para sesiones de prueba.
 """
 from __future__ import annotations
 
@@ -10,6 +15,44 @@ import pandas as pd
 
 MODELOS = {(tipo, nivel) for tipo in ("pulsera", "collar") for nivel in (1, 2, 3)}
 REQUERIDAS = {"session_code", "group", "object_type", "difficulty", "price_clp"}
+# Debe coincidir con GRUPOS en proyecto/js/config.js.
+RANGOS = {"construccion": (1, 30), "observacion": (31, 60)}
+PATRON_REAL = r"^(?:\d{1,2}|[CO]\d{2,3})$"
+PATRON_DEMO = r"^DEMO-[CO]$"
+
+
+def _normalizar_codigo(codigo: str) -> str:
+    """Quita ceros a la izquierda de los números de participante ("05" → "5")."""
+    return str(int(codigo)) if codigo.isdigit() else codigo
+
+
+def grupo_esperado(codigo: str) -> str | None:
+    """Grupo experimental que corresponde a un código de sesión.
+
+    Args:
+        codigo: Número de participante (1–60), código antiguo C01/O01 o DEMO-C/DEMO-O.
+
+    Returns:
+        "construccion", "observacion" o None si el código no corresponde a ningún grupo.
+    """
+    codigo = str(codigo)
+    if codigo.isdigit():
+        n = int(codigo)
+        for grupo, (desde, hasta) in RANGOS.items():
+            if desde <= n <= hasta:
+                return grupo
+        return None
+    if codigo.startswith(("C", "DEMO-C")):
+        return "construccion"
+    if codigo.startswith(("O", "DEMO-O")):
+        return "observacion"
+    return None
+
+
+def _orden_codigo(codigo: str) -> str:
+    """Clave de orden: números de participante en orden numérico, luego códigos de texto."""
+    codigo = str(codigo)
+    return codigo.zfill(4) if codigo.isdigit() else "~" + codigo
 
 
 def _numero_precio(serie: pd.Series) -> pd.Series:
@@ -33,7 +76,8 @@ def leer_csv(entrada: str | Path, modo_demo: bool = False) -> tuple[pd.DataFrame
     Args:
         entrada: Ruta a un CSV o carpeta con uno o más archivos CSV.
         modo_demo: Si es True, procesa solo códigos DEMO-C y DEMO-O;
-            si es False, procesa únicamente sesiones reales.
+            si es False, procesa únicamente sesiones reales (números 1–60
+            o códigos antiguos C01/O01).
 
     Returns:
         Una tabla con seis valoraciones por participante y un diccionario
@@ -83,12 +127,15 @@ def leer_csv(entrada: str | Path, modo_demo: bool = False) -> tuple[pd.DataFrame
         bruto = bruto.loc[bruto["completed"].astype(str).str.strip().str.lower().isin(["1", "1.0", "true", "si", "sí"])].copy()
 
     bruto["session_code"] = bruto["session_code"].astype("string").str.strip().str.upper()
+    bruto["session_code"] = bruto["session_code"].map(
+        lambda c: _normalizar_codigo(c) if isinstance(c, str) else c
+    ).astype("string")
     bruto["group"] = bruto["group"].astype("string").str.strip().str.lower()
     bruto["object_type"] = bruto["object_type"].astype("string").str.strip().str.lower()
     bruto["difficulty"] = pd.to_numeric(bruto["difficulty"], errors="coerce")
     bruto["price_clp"] = _numero_precio(bruto["price_clp"])
 
-    patron_codigo = r"^DEMO-[CO]$" if modo_demo else r"^[CO]\d{2,3}$"
+    patron_codigo = PATRON_DEMO if modo_demo else PATRON_REAL
 
     valido = (
         bruto["group"].isin(["construccion", "observacion"])
@@ -97,6 +144,7 @@ def leer_csv(entrada: str | Path, modo_demo: bool = False) -> tuple[pd.DataFrame
         & bruto["price_clp"].between(1, 1_000_000)
         & (bruto["price_clp"] % 1 == 0)
         & bruto["session_code"].str.match(patron_codigo, na=False)
+        & bruto["session_code"].map(lambda c: grupo_esperado(c) is not None if isinstance(c, str) else False).astype(bool)
     )
     rechazadas = int((~valido).sum())
     if rechazadas:
@@ -114,27 +162,34 @@ def leer_csv(entrada: str | Path, modo_demo: bool = False) -> tuple[pd.DataFrame
     # Cuando un código se reutiliza con diferentes precios, no se puede establecer
     # con seguridad cuál fue el registro válido: se excluye la sesión completa.
     invalidas = set()
+    repetidos = set()
     for codigo, bloque in bruto.groupby("session_code", dropna=False):
+        # Un mismo número usado por dos personas (p. ej. en dos computadores distintos).
+        # En modo demo es normal que DEMO-C/DEMO-O se repitan, pero igual se excluyen.
+        if "participant_id" in bloque.columns and bloque["participant_id"].nunique() > 1:
+            invalidas.add(codigo)
+            repetidos.add(codigo)
+            continue
         modelos = set(zip(bloque["object_type"], bloque["difficulty"]))
         if len(bloque) != 6 or modelos != MODELOS or bloque["group"].nunique() != 1:
             invalidas.add(codigo)
             continue
-        if "participant_id" in bloque.columns and bloque["participant_id"].nunique() > 1:
+        if bloque["group"].iloc[0] != grupo_esperado(codigo):
             invalidas.add(codigo)
-            continue
-        esperado = (
-            "construccion"
-            if str(codigo).startswith(("C", "DEMO-C"))
-            else "observacion"
+    if repetidos and not modo_demo:
+        avisos.append(
+            "Número(s) de participante usados por más de una persona "
+            f"(posiblemente en computadores distintos), excluidos: {', '.join(sorted(map(str, repetidos), key=_orden_codigo))}"
         )
-        if bloque["group"].iloc[0] != esperado:
-            invalidas.add(codigo)
     if invalidas:
-        avisos.append(f"Sesiones incompletas/inconsistentes excluidas ({len(invalidas)}): {', '.join(sorted(map(str, invalidas)))}")
+        avisos.append(f"Sesiones incompletas/inconsistentes excluidas ({len(invalidas)}): {', '.join(sorted(map(str, invalidas), key=_orden_codigo))}")
     limpio = bruto.loc[~bruto["session_code"].isin(invalidas)].copy()
     limpio["participant"] = limpio["session_code"]
     limpio["nivel"] = limpio["difficulty"].map({1: "Fácil", 2: "Medio", 3: "Difícil"})
-    limpio = limpio.sort_values(["session_code", "object_type", "difficulty"]).reset_index(drop=True)
+    limpio = limpio.sort_values(
+        ["session_code", "object_type", "difficulty"],
+        key=lambda col: col.map(_orden_codigo) if col.name == "session_code" else col,
+    ).reset_index(drop=True)
     auditoria = {
         "archivos_encontrados": len(archivos),
         "archivos_leidos": len(partes),
