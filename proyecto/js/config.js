@@ -23,7 +23,7 @@ const GRUPOS = { construccion: [1, 30], observacion: [31, 60] };
  * URL de la aplicación web de Google Apps Script (termina en /exec), ver servidor/Codigo.gs
  * y el README. Vacía = la app funciona solo con almacenamiento local, como antes.
  */
-const SHEETS_URL = '';
+const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbwKdYgDwGgBK1Xg3bd9uXj9VCdpCntskNxtzz9mn_Pq73AqpJLS5RpIiAQb5toy9_FjYA/exec';
 const NMIN = 1, NMAX = 60;
 const grupoDe = n => {
     for (const g in GRUPOS) { const [a, b] = GRUPOS[g]; if (n >= a && n <= b) return g }
