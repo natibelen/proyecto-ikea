@@ -6,7 +6,7 @@
 const CONSENT = `
 <header class="doc-head">
   <h2>Consentimiento informado</h2>
-  <p class="mut">Versión del documento y fecha: 1.0 – noviembre, 2026</p>
+  <p class="mut">Versión del documento y fecha: 1.1 – noviembre, 2026</p>
   <dl>
     <dt>Título del proyecto de investigación</dt>
     <dd>Evaluación de percepción de valor en entornos digitales (Asignatura: Psico-Informática)</dd>
@@ -31,7 +31,7 @@ const CONSENT = `
 <p>Su participación no conlleva beneficios directos, pero contribuirá al conocimiento académico sobre percepción en entornos digitales. El estudio implica únicamente riesgo mínimo, equivalente al uso habitual de un computador por unos minutos (eventual cansancio visual leve). Si siente incomodidad, podrá pausar o detener la actividad de inmediato y contactar a las investigadoras responsables. Dado su carácter estrictamente académico y no clínico, no se prevén hallazgos relevantes para su salud o bienestar.</p>
 
 <h3>Confidencialidad y protección de datos</h3>
-<p>Los datos recopilados se usarán exclusivamente para los fines de esta investigación y solo accederán a ellos Natalia Contreras, Angie Ramírez y el Prof. Jérémy Barbay. La información se tratará confidencialmente conforme a la ley vigente y mediante códigos anónimos que impiden identificarle en eventuales publicaciones o presentaciones. Los registros serán custodiados por las investigadoras en un repositorio privado de GitHub y en sus dispositivos personales protegidos durante un (1) año, tras lo cual serán eliminados definitivamente.</p>
+<p>Los datos recopilados se usarán exclusivamente para los fines de esta investigación y solo accederán a ellos Natalia Contreras, Angie Ramírez y el Prof. Jérémy Barbay. La información se tratará confidencialmente conforme a la ley vigente y mediante códigos anónimos que impiden identificarle en eventuales publicaciones o presentaciones. Los registros serán custodiados por las investigadoras en un repositorio privado de GitHub, en una hoja de cálculo privada de Google Drive y en sus dispositivos personales protegidos durante un (1) año, tras lo cual serán eliminados definitivamente.</p>
 
 <h3>Derechos del participante, costos y compensación</h3>
 <p>Su participación es libre y voluntaria, sin costos ni compensación económica. Usted puede rechazar participar o retirarse en cualquier momento sin consecuencias negativas ni afectar su relación con la Universidad de Concepción o el equipo docente. Asimismo, tiene derecho a solicitar acceso, rectificación o eliminación de sus datos hasta el momento de su retiro, y a conocer los resultados generales agregados al finalizar el estudio.</p>

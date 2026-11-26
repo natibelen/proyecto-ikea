@@ -18,6 +18,12 @@ const H = ['participant_id', 'session_code', 'group', 'es_demo', 'order', 'objec
  * el grupo experimental se deduce internamente del rango.
  */
 const GRUPOS = { construccion: [1, 30], observacion: [31, 60] };
+
+/**
+ * URL de la aplicación web de Google Apps Script (termina en /exec), ver servidor/Codigo.gs
+ * y el README. Vacía = la app funciona solo con almacenamiento local, como antes.
+ */
+const SHEETS_URL = '';
 const NMIN = 1, NMAX = 60;
 const grupoDe = n => {
     for (const g in GRUPOS) { const [a, b] = GRUPOS[g]; if (n >= a && n <= b) return g }

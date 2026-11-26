@@ -13,6 +13,8 @@ Esta versión separa el HTML, CSS y JavaScript en archivos distintos y divide pa
 - `js/accessories.js`: posiciones, geometría y generación SVG de accesorios.
 - `js/csv.js`: creación del CSV a partir de los registros.
 - `js/consent.js`: texto completo del consentimiento informado (versión larga, aceptación con casilla).
+- `js/online.js`: modo en línea (envío a Google Sheets, link personalizado `?p=N`, aviso en celulares).
+- `../servidor/Codigo.gs`: script de Google Apps Script que recibe las respuestas (ver README principal).
 - `js/app.js`: pantallas, flujo de sesión, eventos, administración y escritura en archivo.
 
 ## Cómo ejecutar
